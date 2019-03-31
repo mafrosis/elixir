@@ -1,0 +1,3 @@
+[submodule "phoenix_live_view_example"]
+	path = phoenix_live_view_example
+	url = https://github.com/chrismccord/phoenix_live_view_example.git
