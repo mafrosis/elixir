@@ -1,0 +1,44 @@
+version: '3'
+
+volumes:
+  pg-data: {}
+
+services:
+  postgres:
+    image: postgres:11.2
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=phoenix
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql
+
+  phoenix:
+    image: mafrosis/phoenix:1.4.2
+    build:
+      context: .
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGDATABASE=phoenix
+      - PGPORT=5432
+      - PGHOST=postgres
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgres
+    volumes:
+      - ./assets:/srv/app/assets
+      - ./config:/srv/app/config
+      - ./lib:/srv/app/lib
+      - ./priv:/srv/app/priv
+      - ./test:/srv/app/test
+      #- /srv/app/.git
+      #- /srv/app/_build
+      #- /srv/app/deps
+      - /srv/app/assets/node_modules
+      - /srv/app/priv/static
